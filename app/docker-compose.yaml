@@ -1,0 +1,50 @@
+version: '3.9'
+
+services:
+  mariadb:
+    image: mariadb:10.5
+    container_name: my_mariadb2
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpwd
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpwd
+      MYSQL_DATABASE: filmdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mariadb_data:/var/lib/mysql
+      - ./mariadb_init:/docker-entrypoint-initdb.d
+
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - "8003:8003"
+    environment:
+      DB_USER: user
+      DB_PASSWORD: userpwd
+      DB_NAME: filmdb
+      DB_HOST: mariadb
+    depends_on:
+      - mariadb
+      - ollama
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - backend
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - C:\Users\Utente\.ollama:/root/.ollama
+
+volumes:
+  mariadb_data:
+  ollama_data:

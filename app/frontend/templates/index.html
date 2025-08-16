@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Esonero - Interfaccia</title>
+</head>
+<body>
+    <h1>Search</h1>
+    <form action="/search" method="post">
+        <input name="question" type="text" placeholder="Domanda..." required>
+        <button type="submit">Invia</button>
+    </form>
+    {% if result %}
+        <h2>Risultato</h2>
+        <pre>{{ result }}</pre>
+    {% endif %}
+
+    <h1>Schema</h1>
+    <form action="/schema" method="get">
+        <button type="submit">Mostra schema</button>
+    </form>
+    {% if schema %}
+        <ul>
+        {% for col in schema %}
+            <li>{{ col.table_name }} - {{ col.column_name }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h1>Add</h1>
+    <form action="/add" method="post">
+        <input name="data_line" type="text" placeholder="titolo,...,piattaforma_2" required>
+        <button type="submit">Aggiungi</button>
+    </form>
+    {% if status %}
+        <pre>{{ status }}</pre>
+    {% endif %}
+</body>
+</html>
